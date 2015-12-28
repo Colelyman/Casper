@@ -25,8 +25,10 @@
             {{content}}
         </section>
 
-        <section class="cole">
-          <p>I'm here</p>
+        <section class="report" ng-controller="ctrl">
+          <input type="text" ng-model="data.text"/>
+
+          <h1>This is my text: {{ data.text }}</h1>
         </section>
 
     </article>
