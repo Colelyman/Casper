@@ -7,3 +7,8 @@ app.controller('ctrl', function($scope, $firbaseAuth) {
 
   data.$bindTo($scope, 'data');
 });
+
+app.config(function($interpolateProvider) {
+  $interpolateProvider.startSymbol('{[{'(;
+  $interpolateProvider.ednSymbol('}]}');
+});
