@@ -14,7 +14,7 @@
     </nav>
 </header>
 
-<main ng-cloak class="content" role="main" ng-app="htApp">
+<main class="content" role="main" ng-app="htApp">
     <article class="{{post_class}}">
 
         <header class="post-header">
@@ -25,10 +25,46 @@
             {{content}}
         </section>
 
-        <section class="report" ng-controller="ctrl">
-          <input type="text" ng-model="data.text"/>
+        <section ng-cloak class="report" ng-controller="ctrl">
+          <h2>Current Hometeaching Groups</h2>
+          <div class="group" ng-repeat="group in data">
+            <h3>Hometeachers</h3>
+            <p>{[{ group.hters.comp1 }]} &amp; {[{ group.hters.comp2 }]}</p>
+            <h3>Hometeachees</h3>
+            <p>{[{ group.family.htee1 }]} &amp; {[{ group.family.htee2 }]}</p>
+            <h3>Report</h3>
+            <form>
+              <label for="Report">Select month to report on:</label>
+              <select name="Report" ng-model="monthSelect" ng-options="option.month for option in group.report track by option.month"></select>
+              <label>
+                Visited
+                <input type="radio" name="visit" ng-change="data.$save(group)" ng-model="monthSelect.visited" value="true">
+              </label>
+              <label>
+                Not visited
+                <input type="radio" name="visit" ng-change="data.$save(group)" ng-model="monthSelect.visited" value="false">
+              </label>
+              <br>
+              <textarea rows="5" ng-model="monthSelect.concerns" placeholder="Concerns about this hometeachee: E.g. King Lamoni really needs a shower...">
+              </textarea>
+              <br>
+              <button ng-click="updateConcerns(group)">Update Concerns</button>
+              <button ng-click="data.$remove(group)">Delete</button>
+            </form>
+          </div>
 
-          <h1>This is my text: {[{ data.text }]}</h1>
+          <form ng-submit="addGroup()">
+            <label for="comp1">Companion #1</label>
+            <input type="text" autocomlete="off" tabindex="0" placeholder="E.g. Ammon" ng-model="group.hters.comp1"/>
+            <label for="comp2">Companion #2</label>
+            <input type="text" autocomlete="off" tabindex="0" placeholder="E.g. Aaron" ng-model="group.hters.comp2"/>
+            <label for="htee1">Hometeachee #1</label>
+            <input type="text" autocomplete="off" tabindex="0" placeholder="E.g. King Lamoni" ng-model="group.family.htee1"/>
+            <label for="htee2">Hometeachee #2</label>
+            <input type="text" autocomplete="off" tabindex="0" placeholder="E.g. Zeezrom" ng-model="group.family.htee2"/>
+            <button type="submit">Enter New Hometeaching Group</button>
+          </form>
+
         </section>
 
     </article>
