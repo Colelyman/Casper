@@ -1,6 +1,6 @@
 var app = angular.module('htApp', ['firebase']);
 
-app.controller('ctrl', function($scope, $firbaseAuth) {
+app.controller('ctrl', function($scope, $firebaseObject) {
   var ref = new Firebase("https://provo166ht.firebaseio.com/");
 
   var data = $firebaseObject(ref); // this is async
@@ -9,6 +9,6 @@ app.controller('ctrl', function($scope, $firbaseAuth) {
 });
 
 app.config(function($interpolateProvider) {
-  $interpolateProvider.startSymbol('{[{'(;
-  $interpolateProvider.ednSymbol('}]}');
+  $interpolateProvider.startSymbol('{[{');
+  $interpolateProvider.endSymbol('}]}');
 });
