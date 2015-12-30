@@ -9,13 +9,27 @@ app.controller('ctrl', function($scope, $firebaseArray) {
 
   $scope.monthSelect = null;
 
+  $scope.group = {};
+  $scope.group.htees = [{id: 'htee1'}, {id: 'htee2'}];
+
+  $scope.addHtee = function() {
+    var newHteeNumber = $scope.group.htees.length + 1;
+    $scope.group.htees.push({'id': 'htee' + newHteeNumber});
+  };
+
   $scope.addGroup = function() {
-    $scope.group.report = [
+    var newHtees = [];
+    $scope.group.family = [];
+    var report = [
       {month: 'January', visited: false, concerns: ''},
       {month: 'February', visited: false, concerns: ''},
       {month: 'March', visited: false, concerns: ''},
       {month: 'April', visited: false, concerns: ''}
     ];
+    for(var i = 0; i < $scope.group.htees.length; i++) {
+      $scope.group.htees[i].report = report;
+      console.log(i)
+    }
     $scope.data.$add($scope.group);
     $scope.group = null;
   };

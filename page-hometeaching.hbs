@@ -31,38 +31,41 @@
             <h3>Hometeachers</h3>
             <p>{[{ group.hters.comp1 }]} &amp; {[{ group.hters.comp2 }]}</p>
             <h3>Hometeachees</h3>
-            <p>{[{ group.family.htee1 }]} &amp; {[{ group.family.htee2 }]}</p>
-            <h3>Report</h3>
-            <form>
-              <label for="Report">Select month to report on:</label>
-              <select name="Report" ng-model="monthSelect" ng-options="option.month for option in group.report track by option.month"></select>
-              <label>
-                Visited
-                <input type="radio" name="visit" ng-change="data.$save(group)" ng-model="monthSelect.visited" value="true">
-              </label>
-              <label>
-                Not visited
-                <input type="radio" name="visit" ng-change="data.$save(group)" ng-model="monthSelect.visited" value="false">
-              </label>
-              <br>
-              <textarea rows="5" ng-model="monthSelect.concerns" placeholder="Concerns about this hometeachee: E.g. King Lamoni really needs a shower...">
-              </textarea>
-              <br>
-              <button ng-click="updateConcerns(group)">Update Concerns</button>
-              <button ng-click="data.$remove(group)">Delete</button>
-            </form>
+            <p>A list of your hometeachees should be below. Click to reveal how you report for that person.</p>
+            <div class="report" ng-repeat="htee in group.htees">
+              <h3 ng-click="showReport = ! showReport">Click to Report for: {[{ htee.name }]}</h3>
+              <form ng-class="{ 'hidden': ! showReport }">
+                <label for="Report">Select month to report on:</label>
+                <select name="Report" ng-model="monthSelect" ng-options="option.month for option in htee.report track by option.month"></select>
+                <label>
+                  Visited
+                  <input type="radio" name="visit" ng-change="data.$save(group)" ng-model="monthSelect.visited" value="true">
+                </label>
+                <label>
+                  Not visited
+                  <input type="radio" name="visit" ng-change="data.$save(group)" ng-model="monthSelect.visited" value="false">
+                </label>
+                <br>
+                <textarea rows="5" ng-model="monthSelect.concerns" placeholder="Concerns about this hometeachee: E.g. King Lamoni really needs a shower...">
+                </textarea>
+                <br>
+                <button ng-click="updateConcerns(group)">Update Concerns</button>
+              </form>
+            </div>
+            <button ng-click="data.$remove(group)">Delete</button>
           </div>
 
-          <form ng-submit="addGroup()">
+          <form>
             <label for="comp1">Companion #1</label>
             <input type="text" autocomlete="off" tabindex="0" placeholder="E.g. Ammon" ng-model="group.hters.comp1"/>
             <label for="comp2">Companion #2</label>
             <input type="text" autocomlete="off" tabindex="0" placeholder="E.g. Aaron" ng-model="group.hters.comp2"/>
-            <label for="htee1">Hometeachee #1</label>
-            <input type="text" autocomplete="off" tabindex="0" placeholder="E.g. King Lamoni" ng-model="group.family.htee1"/>
-            <label for="htee2">Hometeachee #2</label>
-            <input type="text" autocomplete="off" tabindex="0" placeholder="E.g. Zeezrom" ng-model="group.family.htee2"/>
-            <button type="submit">Enter New Hometeaching Group</button>
+            <fieldset data-ng-repeat="htee in group.htees track by htee.id">
+              <label>Hometeachee</label>
+              <input type="text" autocomplete="off" placeholder="E.g. King Lamoni" ng-model="htee.name"/>
+            </fieldset>
+            <button ng-click="addHtee()">Add Hometeachee</button>
+            <button ng-click="addGroup()" type="submit">Enter New Hometeaching Group</button>
           </form>
 
         </section>
