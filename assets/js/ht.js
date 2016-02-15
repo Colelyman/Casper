@@ -2,7 +2,7 @@ var app = angular.module('htApp', ['firebase', 'ngMessages']);
 
 app.controller('ctrl', function($scope, $firebaseArray, $firebaseAuth) {
 
-  var auth = $firebaseAuth(new Firebase("https://provo166ht.firebase.com/"));
+  var auth = $firebaseAuth(new Firebase("https://provo166ht.firebaseio.com/"));
 
   /*auth.$authWithOAuthPopup('google').then(function(error, authData) {
     if(error) {
