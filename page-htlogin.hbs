@@ -26,26 +26,25 @@
         </section>
 
         <section class="register">
-
+            <h3>You should be logged in now...</h3>
         </section>
 
-    <script type="text/javascript">
-        auth.$authWithOAuthPopup('google').then(function(error, authData) {
-        if(error) {
-          console.log("Login Failed!", error);
-        }
-        else {
-          console.log("Authenticated successfully with payload:", authData);
-        }
-        var ref = new Firebase("https://provo166ht.firebaseio.com/");
-
-        $scope.data = $firebaseArray(ref); // this is sync
-        }).catch(function(err) {
-            console.log('Authentication failed: ', err);
-        });
-    </script>
     </article>
 </main>
 <script type="text/javascript" src="{{asset "js/ht.js"}}"></script>
+<script type="text/javascript">
+    auth.$authWithOAuthPopup('google').then(function(error, authData) {
+    if(error) {
+      console.log("Login Failed!", error);
+    }
+    else {
+      console.log("Authenticated successfully with payload:", authData);
+    }
+    var ref = new Firebase("https://provo166ht.firebaseio.com/");
 
+    $scope.data = $firebaseArray(ref); // this is sync
+    }).catch(function(err) {
+        console.log('Authentication failed: ', err);
+    });
+</script>
 {{/post}}
