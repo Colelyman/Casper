@@ -2,20 +2,21 @@ var app = angular.module('htApp', ['firebase', 'ngMessages']);
 
 app.controller('ctrl', function($scope, $firebaseArray, $firebaseAuth) {
 
-  var auth = $firebaseAuth(ref);
+  var auth = $firebaseAuth(new Firebase("https://provo166ht.firebase.com/"));
 
-  auth.$authWithOAuthPopup('google').then(function(authData) {
-    console.log('Logged in as: ', authData.google.displayName);
-    var userRef = new Firebase("https://provo166ht.firebaseio.com/users");
-    $scope.users = $firebaseArray(userRef);
-    $scope.users.$add(authData);
-    
+  /*auth.$authWithOAuthPopup('google').then(function(error, authData) {
+    if(error) {
+      console.log("Login Failed!", error);
+    }
+    else {
+      console.log("Authenticated successfully with payload:", authData);
+    }
     var ref = new Firebase("https://provo166ht.firebaseio.com/");
 
     $scope.data = $firebaseArray(ref); // this is sync
   }).catch(function(err) {
     console.log('Authentication failed: ', err);
-  });
+  });*/
 
   $scope.monthSelect = null;
 

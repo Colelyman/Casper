@@ -1,0 +1,51 @@
+{{!< default}}
+
+{{! This is a page template for my hometeaching app. This should pull from my firebase server to get the information about hometeaching. }}
+
+{{! Everything inside the #post tags pulls data from the page }}
+{{#post}}
+
+<header class="main-header post-head {{#if image}}" style="background-image: url({{image}}){{else}}no-cover{{/if}}">
+    <nav class="main-nav {{#if image}}overlay{{/if}} clearfix">
+        {{#if @blog.logo}}<a class="blog-logo" href="{{@blog.url}}"><img src="{{@blog.logo}}" alt="{{@blog.title}}" /></a>{{/if}}
+        {{#if @blog.navigation}}
+            <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
+        {{/if}}
+    </nav>
+</header>
+
+<main class="content" role="main" ng-app="htApp">
+    <article class="{{post_class}}">
+
+        <header class="post-header">
+            <h1 class="post-title">{{title}}</h1>
+        </header>
+
+        <section class="post-content">
+            {{content}}
+        </section>
+
+        <section class="register">
+
+        </section>
+
+    <script type="text/javascript">
+        auth.$authWithOAuthPopup('google').then(function(error, authData) {
+        if(error) {
+          console.log("Login Failed!", error);
+        }
+        else {
+          console.log("Authenticated successfully with payload:", authData);
+        }
+        var ref = new Firebase("https://provo166ht.firebaseio.com/");
+
+        $scope.data = $firebaseArray(ref); // this is sync
+        }).catch(function(err) {
+            console.log('Authentication failed: ', err);
+        });
+    </script>
+    </article>
+</main>
+<script type="text/javascript" src="{{asset "js/ht.js"}}"></script>
+
+{{/post}}
