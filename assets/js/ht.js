@@ -1,8 +1,74 @@
 var app = angular.module('htApp', ['firebase', 'ngMessages']);
 
+app.constant('FirebaseUrl', 'https://provo166ht.firebaseio.com/');
+
+app.state('login', {
+  url:'/htlogin',
+  controller: 'AuthCtrl as authCtrl',
+  templateUrl: 'htlogin.html',
+  resolve: {
+    requireNoAuth: function($state, Auth) {
+      return Auth.$requireAuth().then(function(auth) {
+        $state.go('home');
+      }, function(error) {
+        return;
+      });
+    }
+  }
+});
+
+app.state('register', {
+  url:'/register',
+  controller: 'AuthCtrl as authCtrl',
+  templateUrl: 'htregister.html',
+  resolve: {
+    requireNoAuth: function($state, Auth) {
+      return Auth.$requireAuth().then(function(auth) {
+        $state.go('home');
+      }, function(error) {
+        return;
+      });
+    }
+  }
+});
+
+app.factory('Auth', function($firebaseAuth, FirebaseUrl) {
+  var ref = new Firebase(FirebaseUrl);
+  var auth = $firebaseAuth(ref);
+
+  return auth;
+});
+
+app.controller('AuthCtrl', function(Auth, $state) {
+  var authCtrl = this;
+
+  authCtrl.user = {
+    email: '',
+    password: ''
+  };
+
+  authCtrl.login = function() {
+    Auth.$authWithPassword(authCtrl.user).then(function(auth) {
+      $state.go('home');
+    }, function(error) {
+      authCtrl.error = error;
+    });
+  };
+
+  authCtrl.register = function() {
+    Auth.$createUser(authCtrl.user).then(functino(user) {
+      authCtrl.login();
+    }, function(error) {
+      authCtrl.error = error;
+    });
+  };
+});
+
+
+
 app.controller('ctrl', function($scope, $firebaseArray, $firebaseAuth) {
 
-  var auth = $firebaseAuth(new Firebase("https://provo166ht.firebaseio.com/"));
+  var auth = $firebaseAuth(new Firebase(FirebaseUrl));
 
   /*auth.$authWithOAuthPopup('google').then(function(error, authData) {
     if(error) {
