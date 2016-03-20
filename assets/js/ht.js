@@ -32,6 +32,25 @@ app.state('register', {
   }
 });
 
+app.state('profile', {
+  url:'/profile',
+  resolve: {
+    auth: function($state, Users, Auth) {
+      return Auth.$requireAuth().catch(function() {
+        $state.go('home');
+      });
+    },
+    profile: function(Users, Auth) {
+      return Auth.$requireAuth().then(function(auth) {
+        return Users.getProfile(auth.uid).$loaded();
+      });
+    },
+    url: '.profile',
+    controller: 'ProfileCtrl as profileCtrl',
+    templateUrl: 'users/profile.html'
+  }
+});
+
 app.factory('Auth', function($firebaseAuth, FirebaseUrl) {
   var ref = new Firebase(FirebaseUrl);
   var auth = $firebaseAuth(ref);
@@ -56,7 +75,7 @@ app.controller('AuthCtrl', function(Auth, $state) {
   };
 
   authCtrl.register = function() {
-    Auth.$createUser(authCtrl.user).then(functino(user) {
+    Auth.$createUser(authCtrl.user).then(function(user) {
       authCtrl.login();
     }, function(error) {
       authCtrl.error = error;
@@ -64,7 +83,36 @@ app.controller('AuthCtrl', function(Auth, $state) {
   };
 });
 
+app.controller('ProfileCtrl', function($state, md5, auth, profile) {
+  var profileCtrl = this;
 
+  profileCtrl.profile = profile;
+
+  profileCtrl.updateProfile = function() {
+    profileCtrl.profile.emailHash = md5.createHash(auth.password.email);
+    profileCtrl.profile.$save();
+  };
+});
+
+app.factory('Users', function($firebaseArray, $firebaseObject, FirebaseUrl) {
+  var usersRef = new Firebase(FirebaseUrl + 'users');
+  var users = $firebaseArray(usersRef);
+
+  var Users = {
+    getProfile: function(uid) {
+      return $firebaseObject(usersRef.child(uid));
+    },
+    getDisplayName: function(uid) {
+      return users.$getRecord(uid).displayName;
+    },
+    getGravatar: function(uid) {
+      return '//www.gravatar.com/avatar/' + users.$getRecord(uid).emailHash;
+    },
+    all: users
+  };
+
+  return Users;
+});
 
 app.controller('ctrl', function($scope, $firebaseArray, $firebaseAuth) {
 

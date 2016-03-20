@@ -25,9 +25,17 @@
             {{content}}
         </section>
 
-        <section class="register">
-            <h3>You should be logged in now...</h3>
-        </section>
+        <form ng-submit="profileCtrl.updateProfile()">
+          <p ng-hide="profileCtrl.profile.displayName">
+            What is your display name?
+          </p>
+
+          <div class="input-group">
+            <input required type="text" class="form-control"
+            placeholder="DIsplay Name" ng-model="profileCtrl.profile.displayName">
+          </div>
+          <input type="submit" class="btn btn-default" value="Set Display Name">
+        </form>
 
     </article>
 </main>
